@@ -3,7 +3,6 @@
 
 
 import java.io.*;
-
 import java.net.*;
 
 
@@ -12,26 +11,22 @@ class UDPServer
 {
 
     private static DatagramSocket serverSocket;
+	private int port;
+	private String IPAddress;
+	
 
 
-    public static void main(String args[]) throws Exception
+    public UDPServer(String string, int parseInt) {
+    	IPAddress = string;
+		port = parseInt;
+    	
+	}
 
-    {
+	public void receiveFile() throws SocketException, FileNotFoundException {
+		// TODO Auto-generated method stub
+		serverSocket = new DatagramSocket(15200);
 
-        /*
-
-        InetAddress IPAddress = InetAddress.getByName(args[0]);
-
-        int port =Integer.parseInt(args[1]);
-
-        String filePath="\\output.dat";
-
-         */
-
-
-        serverSocket = new DatagramSocket(15200);
-
-        FileOutputStream fos = new FileOutputStream(new File("D:\\output.txt"));
+        FileOutputStream fos = new FileOutputStream(new File("/Users/Q/output.txt"));
 
         byte[] buffer = new byte[500];
 
@@ -52,8 +47,8 @@ class UDPServer
 
                 //System.out.println("RECEIVED: " + sentence);
 
-                buffer =receivePacket.getData();
-
+//                System.out.println(buffer =receivePacket.getData());
+                
                 fos.write(buffer);
 
                 //bos.write(receivePacket.getData());
@@ -82,8 +77,7 @@ class UDPServer
 
 
         }
-
-    }
+	}
 
 }
 
