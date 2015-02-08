@@ -9,75 +9,104 @@ import java.net.*;
 class UDPServer
 
 {
-
-    private static DatagramSocket serverSocket;
+	private DatagramSocket serverSocket;
 	private int port;
-	private String IPAddress;
-	
 
 
-    public UDPServer(String string, int parseInt) {
-    	IPAddress = string;
+
+	public UDPServer(int parseInt) {
 		port = parseInt;
-    	
+
 	}
 
-	public void receiveFile() throws SocketException, FileNotFoundException {
+	public void receiveFile() throws IOException 
+	{
+		//RunTCP();
+		
+		serverSocket = new DatagramSocket(port);
+
+		FileOutputStream fos = new FileOutputStream(new File("D:\\output.dat"));
+		
+		
+		byte[] buffer = new byte[500];
+		
+		long startTime = 0;
+		try
+		{
+			do
+			{
+
+				DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
+				
+				System.out.println("Server Waiting");
+				startTime = System.currentTimeMillis();
+
+				serverSocket.receive(receivePacket);
+
+				fos.write(buffer);
+
+			}while(buffer[0]!=(byte)-1);
+
+
+
+			serverSocket.close();
+
+			if ( fos != null )
+				fos.close();
+
+			System.out.println("Done !");
+
+		}
+
+		catch ( Exception e)
+		{
+			System.out.println(e);    
+		}
+		
+		long endTime   = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Running Time : "+totalTime + "milli soconds"); 
+	}
+	
+	private void RunTCP() throws IOException
+	{
 		// TODO Auto-generated method stub
-		serverSocket = new DatagramSocket(15200);
+		ServerSocket TCPSocket = new ServerSocket(port);
+		FileOutputStream fos = new FileOutputStream(new File("D:\\output.txt"));
+		long startTime = 0;
+		byte[] buffer = new byte[500];
 
-        FileOutputStream fos = new FileOutputStream(new File("/Users/Q/output.txt"));
+		try
+		{
+			Socket socket = TCPSocket.accept();
+			do
+			{
+				
+				System.out.println("Server has Connected");
+				startTime = System.currentTimeMillis();
+				DataInputStream  input = new DataInputStream(socket.getInputStream());
+				
+				input.read(buffer);
+				
+				fos.write(buffer);
+			}
+			while(buffer[0] != (byte)-1);
+			
+			TCPSocket.close();
 
-        byte[] buffer = new byte[500];
+			if ( fos != null )
+				fos.close();
 
-
-        try
-
-        {
-
-            do
-
-            {
-
-                DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
-
-                serverSocket.receive(receivePacket);
-
-                //String sentence = new String( receivePacket.getData());
-
-                //System.out.println("RECEIVED: " + sentence);
-
-//                System.out.println(buffer =receivePacket.getData());
-                
-                fos.write(buffer);
-
-                //bos.write(receivePacket.getData());
-
-                //Arrays.fill( buffer, (byte)0);
-
-            }while(buffer[0]!=(byte)-1);
-
-
-
-            serverSocket.close();
-
-            if ( fos != null )
-
-                fos.close();
-
-            System.out.println("Done !");
-
-        }
-
-        catch ( Exception e)
-
-        {
-
-            System.out.println(e);    
-
-
-        }
+			System.out.println("Done !");
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		
+		
+		long endTime   = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Running Time : "+totalTime + "milli soconds");
 	}
-
 }
-
