@@ -25,7 +25,7 @@ class UDPServer
 		
 		serverSocket = new DatagramSocket(port);
 
-		FileOutputStream fos = new FileOutputStream(new File("D:\\output.dat"));
+		FileOutputStream fos = new FileOutputStream(new File("output.dat"));
 		
 		
 		byte[] buffer = new byte[500];
@@ -72,7 +72,7 @@ class UDPServer
 	{
 		// TODO Auto-generated method stub
 		ServerSocket TCPSocket = new ServerSocket(port);
-		FileOutputStream fos = new FileOutputStream(new File("D:\\output.txt"));
+		FileOutputStream fos = new FileOutputStream(new File("output.dat"));
 		long startTime = 0;
 		byte[] buffer = new byte[500];
 
